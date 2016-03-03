@@ -21,6 +21,8 @@ from z3c.relationfield.schema import RelationList, RelationChoice
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.multilingualbehavior.directives import languageindependent
 from collective import dexteritytextindexer
+from Products.ATContentTypes.interfaces.document import IATDocument
+from Products.ATContentTypes.interfaces.folder import IATFolder
 
 from wccminisite.app import MessageFactory as _
 
@@ -31,6 +33,13 @@ class Ihomepage(form.Schema, IImageScaleTraversable):
     """
     homepage
     """
+    
+    pages_sources = RelationChoice(
+        title = _(u"Source of Contributions"),
+        source = ObjPathSourceBinder(object_provides = IATFolder.__identifier__),
+        required = False,
+    )
+    
     pass
 
 alsoProvides(Ihomepage, IFormFieldProvider)
