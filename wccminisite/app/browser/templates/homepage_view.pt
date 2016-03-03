@@ -15,10 +15,19 @@
     if needed.
 </tal:comment>
 
+<metal:styleslot fill-slot="style_slot">
+      <style type="text/css">
+            .documentFirstHeading{
+                  display: none;
+            }
+      </style>
+      
+</metal:styleslot>
+
 <metal:main fill-slot="content-core">
   <metal:content-core define-macro="content-core">
 
-    <tal:block repeat="widget view/widgets/values">
+    <!--<tal:block repeat="widget view/widgets/values">
         <div class="field" tal:condition="python:widget.__name__ not in ('IDublinCore.title', 'IDublinCore.description', 'title', 'description',)">
             <label tal:content="widget/label" />
             <br />
@@ -34,7 +43,93 @@
             <br />
             <div tal:content="structure widget/render" />
         </div>
-    </fieldset>
+    </fieldset>-->
+    <h1 tal:content="context/@@plone_portal_state/portal_title"></h1>
+    <tal:if tal:condition="context/@@plone_portal_state/anonymous">
+            <tal:block tal:define="site_url context/@@plone_portal_state/portal_url;
+                        foo python: request.RESPONSE.redirect(site_url+'/login')"></tal:block>
+      </tal:if>
+    
+    <tal:if tal:condition="not: context/@@plone_portal_state/anonymous">
+      <p><b>New Contributions:</b></p>
+      <tal:block tal:define="pas_member context/@@pas_member;
+                                   brains view/contents;
+                                   toLocalizedTime nocall: context/@@plone/toLocalizedTime;
+                                   navigation_root_url context/@@plone_portal_state/navigation_root_url;" tal:condition="brains">
+                  <tal:entry tal:repeat="item brains">
+                        <div class="tileItem visualIEFloatFix"
+                           tal:define="item_object item/_unrestrictedGetObject;
+                                       item_creator item/Creator;
+                                       item_modified item/ModificationDate;
+                                       item_title_or_id item/pretty_title_or_id;
+                                       item_description item/Description;
+                                       item_number repeat/item/number;
+                                       item_url item/getURL|item/absolute_url">
+                            
+                              <article class="post-article">
+                                    <h3 class="post_title">
+                                         <a href="#"
+                                                class="summary url"
+                                                tal:attributes="href item_url;"
+                                                tal:content="item_title_or_id">
+                                                 Item Title
+                                          </a> 
+                                    </h3>
+                                    
+                                    <div class="row">
+                              
+                                          <tal:block tal:condition="exists:item_object/image_large">
+                                                <div class="large-4 columns">
+                                                      <a href="#" tal:attributes="href item_url">
+                                                            <img src="" alt="" tal:replace="structure python: path('nocall:item_object/tag')(scale='large')" />
+                                                      </a>
+                                                </div>
+                                                <div class="large-8 columns">
+                                                      <p tal:condition="item_description" tal:content="item_description">Archbishop Emeritus Desmond Tutu has called on delegates attending next week’s United Nations Climate Summit in New York to take the first tangible steps to move humanity beyond the fossil fuel era.</p>
+                                                </div>
+                                          </tal:block>
+                                          
+                                          <tal:block tal:condition="python: not hasattr(item_object, 'getImage') or not bool(item_object.getImage())">
+                                                <div class="large-12 columns">
+                                                      <p tal:condition="item_description" tal:content="item_description">Description here</p>
+                                                </div>
+                                                
+                                          </tal:block>
+                                          
+                                    </div>
+                                   <!-- <p class="post_rmore">
+                                          <a href="" tal:attributes="href item_url"> <span i18n:translate="read_more">Read More.</span>  </a>
+                                    </p>-->
+                                  
+                                      <!--<div class="post_author">
+                                          <div class="username">
+                                          <tal:name tal:condition="item_creator"
+                                                tal:define="author python:pas_member.info(item_creator)">
+                                              <a href="#" tal:attributes="href string:${navigation_root_url}/author_view?id=${item_creator}"
+                                                 tal:content="author/name_or_id"
+                                                 tal:omit-tag="not:author">
+                                                Author Name
+                                              </a>
+                                              
+                                            </tal:name>
+                                          </div>
+                                      </div>-->
+                                  
+                                      
+                                    
+                              </article> 
+                        
+                          
+      
+                        </div>
+                  </tal:entry>
+                 <!-- <tal:block>
+                        <p style="text-align: right;margin-top: 1.33333rem;">
+                            <a tal:attributes="href string:${context/absolute_url}/blog-stories">More</a>
+                        </p>
+                  </tal:block>-->
+            </tal:block>
+    </tal:if>
 
 
   </metal:content-core>
