@@ -1,6 +1,12 @@
 Changelog
 =========
 
+
+'1.0dev0' - Unreleased
+---------------------
+
+ - added workflow xml
+
 '1.0' - Unreleased
 ---------------------
 
