@@ -21,7 +21,7 @@ class Index(dexterity.DisplayForm):
         if context.pages_sources:
             source_path = '/'.join(context.pages_sources.to_object.getPhysicalPath())
             brains = self.portal_catalog.unrestrictedSearchResults(path={'query':source_path, 'depth':1},
-                                                                   portal_type='Document',
+                                                                   portal_type=('Document', 'News Item'),
                                                                    sort_on='created',
                                                                    sort_order='reverse',
                                                                    review_state='internally_published')[:5]
