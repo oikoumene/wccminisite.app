@@ -31,6 +31,21 @@ class Iprofile(form.Schema, IImageScaleTraversable):
     """
     profile
     """
+
+    fullname = schema.TextLine(
+           title=_(u"Full Name"),
+           required=True,
+        )
+
+    email_add = schema.TextLine(
+           title=_(u"Email"),
+           required=True,
+        )
+
+    contact_details = schema.TextLine(
+           title=_(u"Contact Details"),
+           required=True,
+        )
     pass
 
 alsoProvides(Iprofile, IFormFieldProvider)
