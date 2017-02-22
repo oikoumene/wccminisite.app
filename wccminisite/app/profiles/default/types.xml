@@ -8,5 +8,6 @@
   -->
 <object name="portal_types" meta_type="Plone Types Tool">
   <!-- -*- extra stuff goes here -*- -->
+  <object name="wccminisite.app.profile" meta_type="Dexterity FTI" />
   <object name="wccminisite.app.homepage" meta_type="Dexterity FTI" />
 </object>
