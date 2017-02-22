@@ -24,6 +24,10 @@ from collective import dexteritytextindexer
 
 from wccminisite.app import MessageFactory as _
 
+from plone.z3cform.fieldsets.utils import move
+from plone.directives import dexterity, form
+from z3c.form.interfaces import IAddForm, IEditForm, HIDDEN_MODE, INPUT_MODE, DISPLAY_MODE
+
 
 # Interface class; used to define content-type schema.
 
@@ -32,20 +36,33 @@ class Iprofile(form.Schema, IImageScaleTraversable):
     profile
     """
 
-    fullname = schema.TextLine(
-           title=_(u"Full Name"),
-           required=True,
-        )
-
-    email_add = schema.TextLine(
-           title=_(u"Email"),
-           required=True,
-        )
-
-    contact_details = schema.TextLine(
-           title=_(u"Contact Details"),
+    username = schema.TextLine(
+           title=_(u"Portal Username"),
            required=True,
         )
     pass
 
 alsoProvides(Iprofile, IFormFieldProvider)
+
+class profileAddForm(dexterity.AddForm):
+    grok.name('wccminisite.app.profile')
+    form.wrap(False)
+    
+    def updateWidgets(self):
+        super(profileAddForm, self).updateWidgets()
+        pass
+        
+    
+    def updateFields(self):
+        super(profileAddForm, self).updateFields()
+        self.fields['IDublinCore.title'].field.title = _(u'Full name')
+        self.fields['IDublinCore.description'].mode = HIDDEN_MODE
+        
+class profileEditForm(dexterity.EditForm):
+    grok.context(Iprofile)
+    
+    def updateFields(self):
+        super(profileEditForm, self).updateFields()
+        self.fields['IDublinCore.title'].field.title = _(u'Full name')
+        self.fields['IDublinCore.description'].mode = HIDDEN_MODE
+        
